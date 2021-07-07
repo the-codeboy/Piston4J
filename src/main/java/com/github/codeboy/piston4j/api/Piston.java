@@ -1,11 +1,11 @@
-package io.github.codeboy.piston4j.api;
+package com.github.codeboy.piston4j.api;
 
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import io.github.codeboy.piston4j.util.Util;
-import io.github.codeboy.piston4j.exceptions.PistonException;
+import com.github.codeboy.piston4j.util.Util;
+import com.github.codeboy.piston4j.exceptions.PistonException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

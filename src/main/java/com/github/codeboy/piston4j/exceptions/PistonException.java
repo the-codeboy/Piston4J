@@ -1,4 +1,4 @@
-package io.github.codeboy.piston4j.exceptions;
+package com.github.codeboy.piston4j.exceptions;
 
 import java.io.IOException;
 

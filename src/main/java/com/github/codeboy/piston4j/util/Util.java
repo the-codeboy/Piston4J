@@ -1,4 +1,4 @@
-package io.github.codeboy.piston4j.util;
+package com.github.codeboy.piston4j.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

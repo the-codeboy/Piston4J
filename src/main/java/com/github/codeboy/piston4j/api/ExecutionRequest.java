@@ -1,4 +1,4 @@
-package io.github.codeboy.piston4j.api;
+package com.github.codeboy.piston4j.api;
 
 public class ExecutionRequest {
     private String language,version;
