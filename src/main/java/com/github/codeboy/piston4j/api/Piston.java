@@ -30,7 +30,7 @@ public class Piston {
     private boolean initialised = false;
     private Thread initialisationThread;
     private final int retryLimit = 10;
-    private final int retryTime = 1000;
+    private final int retryTime = 500;
     private String apiKey=null;
 
     /**
@@ -177,7 +177,7 @@ public class Piston {
                 if (retries >= retryLimit) {
                     throw new PistonException("Reached retry limit (" + retryLimit + ")");
                 } else if (retries > 0) {
-//                    System.err.println("Request failed. Retrying in "+retries*retryTime/1000+" seconds");
+//                    System.err.println("Request failed. Retrying in "+ (retries*retryTime)+" milliseconds");
                 }
                 Thread.sleep((long) retries * retryTime);
                 con = (HttpURLConnection) url.openConnection();
