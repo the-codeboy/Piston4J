@@ -29,13 +29,17 @@ public class Piston {
     private List<Runtime> runtimes = new ArrayList<>();
     private boolean initialised=false;
     private Thread initialisationThread;
-    private int retryLimit=10,retryTime=1000;
+    private int retryLimit=10;
+    private int retryTime=1000;
 
     private Piston(String url) {
         this.url = url;
         initRuntimes();
     }
 
+    /**
+     * @return the default instance {@link Piston}
+     */
     public static Piston getDefaultApi() {
         return piston;
     }
