@@ -102,14 +102,14 @@ public class ExecutionRequest {
     }
 
     /**
-     * @return the timeout used when compiling the code
+     * @return The maximum time allowed for the compile stage to finish before bailing out in millisecond
      */
     public int getCompile_timeout() {
         return compile_timeout;
     }
 
     /**
-     * @param compile_timeout the timeout used when compiling the code
+     * @param compile_timeout The maximum time allowed for the compile stage to finish before bailing out in millisecond
      * @return this for chaining
      */
     public ExecutionRequest setCompile_timeout(int compile_timeout) {
@@ -118,14 +118,14 @@ public class ExecutionRequest {
     }
 
     /**
-     * @return the timeout used when running the code
+     * @return The maximum time allowed for the run stage to finish before bailing out in milliseconds
      */
     public int getRun_timeout() {
         return run_timeout;
     }
 
     /**
-     * @param run_timeout the timeout used when running the code
+     * @param run_timeout The maximum time allowed for the run stage to finish before bailing out in milliseconds
      * @return this for chaining
      */
     public ExecutionRequest setRun_timeout(int run_timeout) {
@@ -134,14 +134,14 @@ public class ExecutionRequest {
     }
 
     /**
-     * @return the limit of how much memory will be used for compiling
+     * @return The maximum amount of memory the compile stage is allowed to use in bytes
      */
     public int getCompile_memory_limit() {
         return compile_memory_limit;
     }
 
     /**
-     * @param compile_memory_limit the limit of how much memory will be used for compiling
+     * @param compile_memory_limit TThe maximum amount of memory the compile stage is allowed to use in bytes
      * @return this for chaining
      */
     public ExecutionRequest setCompile_memory_limit(int compile_memory_limit) {
@@ -150,14 +150,14 @@ public class ExecutionRequest {
     }
 
     /**
-     * @return the limit of how much memory will be used when running the code
+     * @return The maximum amount of memory the run stage is allowed to use in bytes
      */
     public int getRun_memory_limit() {
         return run_memory_limit;
     }
 
     /**
-     * @param run_memory_limit the limit of how much memory will be used when running the code
+     * @param run_memory_limit The maximum amount of memory the run stage is allowed to use in bytes
      * @return this for chaining
      */
     public ExecutionRequest setRun_memory_limit(int run_memory_limit) {
