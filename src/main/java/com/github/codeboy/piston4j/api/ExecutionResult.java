@@ -26,7 +26,7 @@ public class ExecutionResult {
         return "ExecutionResult{" +
                 "language='" + language + '\'' +
                 ", version='" + version + '\'' +
-                ", compile='" + compile + '\'' +
+                (compile!=null?", compile='" + compile + '\'':"")+
                 ", run=" + run +
                 '}';
     }
