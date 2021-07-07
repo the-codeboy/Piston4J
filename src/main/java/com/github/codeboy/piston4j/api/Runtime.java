@@ -30,8 +30,7 @@ public class Runtime {
      * @return the result
      */
     public ExecutionResult execute(String code) {
-        ExecutionRequest request = new ExecutionRequest(language, version, new CodeFile(code));
-        return piston.execute(request);
+        return execute(new CodeFile(code));
     }
 
     @Override
