@@ -17,7 +17,7 @@ public class Runtime {
     }
 
     /**
-     * @param codeFiles the codeFiles used. Must be at least one
+     * @param codeFiles the codeFiles used. Must be at least one. The first element is the file that gets executed
      * @return the result
      */
     public ExecutionResult execute(CodeFile... codeFiles) {

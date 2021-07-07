@@ -61,10 +61,10 @@ public class ExecutionRequest {
     }
 
     /**
-     * @param codeFiles the codeFiles used in this request
+     * @param codeFiles the codeFiles used in this request. The first element is the file that gets executed
      * @return this for chaining
      */
-    public ExecutionRequest setFiles(CodeFile[] codeFiles) {
+    public ExecutionRequest setFiles(CodeFile... codeFiles) {
         this.files = codeFiles;
         return this;
     }
