@@ -2,7 +2,7 @@ package com.github.codeboy.piston4j.api;
 
 public class ExecutionRequest {
     private String language, version;
-    private File[] files;
+    private CodeFile[] files;
     private String stdin = "";
     private String[] args = {};
     private int compile_timeout = 10000,
@@ -13,12 +13,12 @@ public class ExecutionRequest {
     /**
      * @param language the language of the request
      * @param version  the version of the programming language
-     * @param files    Files used. Must be at least one if this request should be executed by {@link Piston#execute(ExecutionRequest)}
+     * @param codeFiles    Files used. Must be at least one if this request should be executed by {@link Piston#execute(ExecutionRequest)}
      */
-    public ExecutionRequest(String language, String version, File... files) {
+    public ExecutionRequest(String language, String version, CodeFile... codeFiles) {
         this.language = language;
         this.version = version;
-        this.files = files;
+        this.files = codeFiles;
     }
 
     /**
@@ -56,16 +56,16 @@ public class ExecutionRequest {
     /**
      * @return the files used in this request
      */
-    public File[] getFiles() {
+    public CodeFile[] getFiles() {
         return files;
     }
 
     /**
-     * @param files the files used in this request
+     * @param codeFiles the codeFiles used in this request
      * @return this for chaining
      */
-    public ExecutionRequest setFiles(File[] files) {
-        this.files = files;
+    public ExecutionRequest setFiles(CodeFile[] codeFiles) {
+        this.files = codeFiles;
         return this;
     }
 

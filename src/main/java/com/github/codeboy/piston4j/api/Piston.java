@@ -134,7 +134,7 @@ public class Piston {
     public ExecutionResult execute(String language, String code) {
         Runtime runtime = getRuntime(language)
                 .orElseThrow(() -> new PistonException("Language \"" + language + "\" not found"));
-        return runtime.execute(new File(code));
+        return runtime.execute(new CodeFile(code));
     }
 
     /**
@@ -146,7 +146,7 @@ public class Piston {
      * @return the result
      */
     public ExecutionResult execute(String language, String version, String code) {
-        ExecutionRequest request = new ExecutionRequest(language, version, new File(code));
+        ExecutionRequest request = new ExecutionRequest(language, version, new CodeFile(code));
         return execute(request);
     }
 

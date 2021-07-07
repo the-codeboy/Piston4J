@@ -41,8 +41,9 @@ repositories {
 > A simple Hello World using javascript
 
 ```java
+import com.github.codeboy.piston4j.api.CodeFile;
 import com.github.codeboy.piston4j.api.ExecutionResult;
-import com.github.codeboy.piston4j.api.File;
+import com.github.codeboy.piston4j.api.CodeFile;
 import com.github.codeboy.piston4j.api.Piston;
 import com.github.codeboy.piston4j.api.Runtime;
 
@@ -54,8 +55,8 @@ public class Example {
         Optional<Runtime> optionalRuntime = api.getRuntime("js");//get the javascript runtime
         if (optionalRuntime.isPresent()) {//check if the runtime exists
             Runtime runtime = optionalRuntime.get();
-            File file = new File("main.js", "console.log(\"Hello World!\")");//create the file containing the javascript code
-            ExecutionResult result = runtime.execute(file);//execute the file
+            CodeFile codeFile = new CodeFile("main.js", "console.log(\"Hello World!\")");//create the codeFile containing the javascript code
+            ExecutionResult result = runtime.execute(codeFile);//execute the codeFile
             System.out.println(result.getOutput().getOutput());//print the result
         }
     }
@@ -66,16 +67,16 @@ public class Example {
 > You can also execute the code without getting the runtime. However this is not recommended since it wont work unless you know the correct version of the runtime
 
 ```java
+import com.github.codeboy.piston4j.api.CodeFile;
 import com.github.codeboy.piston4j.api.ExecutionRequest;
 import com.github.codeboy.piston4j.api.ExecutionResult;
-import com.github.codeboy.piston4j.api.File;
 import com.github.codeboy.piston4j.api.Piston;
 
 public class Example2 {
     public static void main(String[] args) {
         Piston api = Piston.getDefaultApi();//get the api at https://emkc.org/api/v2/piston
-        File file = new File("main.js", "console.log(\"Hello World!\")");//create the file containing the javascript code
-        ExecutionRequest request=new ExecutionRequest("js","16.3.0",file);//create the request using the file, a language and a version
+        CodeFile codeFile = new CodeFile("main.js", "console.log(\"Hello World!\")");//create the codeFile containing the javascript code
+        ExecutionRequest request = new ExecutionRequest("js", "16.3.0", codeFile);//create the request using the codeFile, a language and a version
         ExecutionResult result = api.execute(request);//execute the request
         System.out.println(result.getOutput().getOutput());//print the result
     }

@@ -17,11 +17,11 @@ public class Runtime {
     }
 
     /**
-     * @param files the files used. Must be at least one
+     * @param codeFiles the codeFiles used. Must be at least one
      * @return the result
      */
-    public ExecutionResult execute(File... files) {
-        ExecutionRequest request = new ExecutionRequest(language, version, files);
+    public ExecutionResult execute(CodeFile... codeFiles) {
+        ExecutionRequest request = new ExecutionRequest(language, version, codeFiles);
         return piston.execute(request);
     }
 

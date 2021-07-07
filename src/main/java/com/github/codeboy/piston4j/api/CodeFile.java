@@ -1,6 +1,6 @@
 package com.github.codeboy.piston4j.api;
 
-public class File {
+public class CodeFile {
     private String name;
     private final String content;
 
@@ -9,7 +9,7 @@ public class File {
      *
      * @param content the content of the file
      */
-    public File(String content) {
+    public CodeFile(String content) {
         this.content = content;
     }
 
@@ -19,7 +19,7 @@ public class File {
      * @param name    the name of the file
      * @param content the content of the file
      */
-    public File(String name, String content) {
+    public CodeFile(String name, String content) {
         this.name = name;
         this.content = content;
     }
