@@ -32,6 +32,9 @@ public class Piston {
     private int retryLimit=10;
     private int retryTime=1000;
 
+    /**
+     * private to prevent creation of multiple instances for the same api
+     */
     private Piston(String url) {
         this.url = url;
         initRuntimes();
@@ -44,6 +47,10 @@ public class Piston {
         return piston;
     }
 
+    /**
+     * @param url the url of the api
+     * @return an instance of {@link Piston} using the specified api
+     */
     public static Piston getInstance(String url) {
         return instances.containsKey(url) ? instances.get(url) : new Piston(url);
     }
@@ -69,15 +76,23 @@ public class Piston {
             catch (IOException e){
                 e.printStackTrace();
             }
-            System.out.println("initialised runtimes");
         });
         initialisationThread.start();
     }
 
+    /**
+     * @param language the language of the runtime
+     * @return An optional runtime with the specified language
+     */
     public Optional<Runtime> getRuntime(String language) {
         return Optional.ofNullable(getRuntimeUnsafe(language));
     }
 
+    /**
+     * You should not use this method. Instead use {@link Piston#getRuntime(String)}
+     * @param language the language of the runtime
+     * @return The runtime with the specified language. This might be null if the api doesn´t support this language
+     */
     public Runtime getRuntimeUnsafe(String language) {
         for (Runtime runtime : getRuntimes()) {
             if (runtime.hasAlias(language))
@@ -86,10 +101,17 @@ public class Piston {
         return null;
     }
 
+    /**
+     * @return the url where this api is located
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * If the runtimes haven´t been retrieved yet this method waits for that before it returns
+     * @return A list of all the runtimes supported
+     */
     public List<Runtime> getRuntimes() {
         if(!initialised&&initialisationThread!=null) {
             try {
@@ -101,7 +123,14 @@ public class Piston {
         return runtimes;
     }
 
+    /**
+     * Executes cde from an {@link ExecutionRequest}
+     * @param request the {@link ExecutionRequest}. This must contain at least one file
+     * @return the result of the Execution
+     */
     public ExecutionResult execute(ExecutionRequest request) {
+        if(!request.isValid())
+            throw new IllegalArgumentException("Request invalid");
         HttpURLConnection con;
         try {
             URL url = new URL(getUrl() + "/execute");
@@ -120,7 +149,6 @@ public class Piston {
                 con.setDoOutput(true);
 
                 String requestBody = new Gson().toJson(request);
-//            System.out.println(requestBody);
                 con.setRequestProperty("Content-Length", Integer.toString(requestBody.length()));
                 con.getOutputStream().write(requestBody.getBytes(StandardCharsets.UTF_8));
             } while (con.getResponseCode()==429);
@@ -149,7 +177,7 @@ public class Piston {
                     message=object.get("message").getAsString();
                 throw new PistonException(message);
             }
+            throw new PistonException(e.getMessage());
         }
-        return new ExecutionResult();
     }
 }

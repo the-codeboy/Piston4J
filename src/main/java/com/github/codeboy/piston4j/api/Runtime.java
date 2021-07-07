@@ -8,6 +8,10 @@ public class Runtime {
     private String[]aliases;
     private Piston piston;
 
+    /**
+     * @param alias the alias
+     * @return whether alias is a valid alias of this runtime
+     */
     public boolean hasAlias(String alias){
         return language.equalsIgnoreCase(alias)|| Arrays.stream(aliases).anyMatch(alias::equalsIgnoreCase);
     }
@@ -16,6 +20,10 @@ public class Runtime {
         this.piston = piston;
     }
 
+    /**
+     * @param files the files used. Must be at least one
+     * @return the result
+     */
     public ExecutionResult execute(File... files){
         ExecutionRequest request=new ExecutionRequest(language,version,files);
         return piston.execute(request);
