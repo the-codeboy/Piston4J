@@ -25,6 +25,15 @@ public class Runtime {
         return piston.execute(request);
     }
 
+    /**
+     * @param code the code used
+     * @return the result
+     */
+    public ExecutionResult execute(String code) {
+        ExecutionRequest request = new ExecutionRequest(language, version, new CodeFile(code));
+        return piston.execute(request);
+    }
+
     @Override
     public String toString() {
         return "Runtime{" +

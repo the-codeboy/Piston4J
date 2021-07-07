@@ -2,7 +2,7 @@ package com.github.codeboy.piston4j.api;
 
 public class ExecutionResult {
     private String language, version;
-    private ExecutionOutput run;
+    private ExecutionOutput run,compile;
 
     //region getter
     public String getLanguage() {
@@ -17,11 +17,16 @@ public class ExecutionResult {
         return run;
     }
 
+    public ExecutionOutput getCompileOutput() {
+        return compile;
+    }
+
     @Override
     public String toString() {
         return "ExecutionResult{" +
                 "language='" + language + '\'' +
                 ", version='" + version + '\'' +
+                ", compile='" + compile + '\'' +
                 ", run=" + run +
                 '}';
     }
