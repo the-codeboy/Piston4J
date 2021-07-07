@@ -31,6 +31,7 @@ public class Piston {
     private Thread initialisationThread;
     private final int retryLimit = 10;
     private final int retryTime = 1000;
+    private String apiKey=null;
 
     /**
      * private to prevent creation of multiple instances for the same api
@@ -124,6 +125,14 @@ public class Piston {
         return runtimes;
     }
 
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     /**
      * Executes the given code using an available version of the language supplied
      *
@@ -173,6 +182,8 @@ public class Piston {
                 Thread.sleep((long) retries * retryTime);
                 con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("POST");
+                if(apiKey!=null)
+                    con.addRequestProperty("Authorization",apiKey);
                 con.addRequestProperty("Content-Type", "application/" + "POST");
                 con.setDoOutput(true);
 
