@@ -1,11 +1,11 @@
 package com.github.codeboy.piston4j.api;
 
 
+import com.github.codeboy.piston4j.exceptions.PistonException;
+import com.github.codeboy.piston4j.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.github.codeboy.piston4j.util.Util;
-import com.github.codeboy.piston4j.exceptions.PistonException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,10 +27,10 @@ public class Piston {
 
     private final String url;
     private List<Runtime> runtimes = new ArrayList<>();
-    private boolean initialised=false;
+    private boolean initialised = false;
     private Thread initialisationThread;
-    private int retryLimit=10;
-    private int retryTime=1000;
+    private final int retryLimit = 10;
+    private final int retryTime = 1000;
 
     /**
      * private to prevent creation of multiple instances for the same api
@@ -56,7 +56,7 @@ public class Piston {
     }
 
     private void initRuntimes() {
-        initialisationThread=new Thread(() -> {
+        initialisationThread = new Thread(() -> {
             try {
                 URL url = new URL(getUrl() + "/runtimes");
                 String json = Util.get(url);
@@ -64,16 +64,15 @@ public class Piston {
                 Type listType = new TypeToken<List<Runtime>>() {
                 }.getType();
                 List<Runtime> runtimes = gson.fromJson(json, listType);
-                this.runtimes=runtimes;
+                this.runtimes = runtimes;
                 for (Runtime runtime : runtimes) {
                     runtime.setPiston(this);
                 }
-                initialised=true;
+                initialised = true;
                 instances.put(getUrl(), this);
             } catch (MalformedURLException e) {
-                throw new IllegalArgumentException("\""+url+"\" is not a valid url");
-            }
-            catch (IOException e){
+                throw new IllegalArgumentException("\"" + url + "\" is not a valid url");
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
@@ -90,6 +89,7 @@ public class Piston {
 
     /**
      * You should not use this method. Instead use {@link Piston#getRuntime(String)}
+     *
      * @param language the language of the runtime
      * @return The runtime with the specified language. This might be null if the api doesn´t support this language
      */
@@ -110,10 +110,11 @@ public class Piston {
 
     /**
      * If the runtimes haven´t been retrieved yet this method waits for that before it returns
+     *
      * @return A list of all the runtimes supported
      */
     public List<Runtime> getRuntimes() {
-        if(!initialised&&initialisationThread!=null) {
+        if (!initialised && initialisationThread != null) {
             try {
                 initialisationThread.join();
             } catch (InterruptedException e) {
@@ -124,25 +125,52 @@ public class Piston {
     }
 
     /**
-     * Executes cde from an {@link ExecutionRequest}
+     * Executes the given code using an available version of the language supplied
+     *
+     * @param language the language the code is in
+     * @param code     the code
+     * @return the result
+     */
+    public ExecutionResult execute(String language, String code) {
+        Runtime runtime = getRuntime(language)
+                .orElseThrow(() -> new PistonException("Language \"" + language + "\" not found"));
+        return runtime.execute(new File(code));
+    }
+
+    /**
+     * Executes the given code using the version of the language supplied
+     *
+     * @param language the language the code is in
+     * @param version  the version of the language
+     * @param code     the code
+     * @return the result
+     */
+    public ExecutionResult execute(String language, String version, String code) {
+        ExecutionRequest request = new ExecutionRequest(language, version, new File(code));
+        return execute(request);
+    }
+
+    /**
+     * Executes code from an {@link ExecutionRequest}
+     *
      * @param request the {@link ExecutionRequest}. This must contain at least one file
      * @return the result of the Execution
      */
     public ExecutionResult execute(ExecutionRequest request) {
-        if(!request.isValid())
+        if (!request.isValid())
             throw new IllegalArgumentException("Request invalid");
         HttpURLConnection con;
         try {
             URL url = new URL(getUrl() + "/execute");
-            int retries=-1;
+            int retries = -1;
             do {
                 retries++;
-                if(retries>=retryLimit){
-                    throw new PistonException("Reached retry limit ("+retryLimit+")");
-                }else if(retries>0){
+                if (retries >= retryLimit) {
+                    throw new PistonException("Reached retry limit (" + retryLimit + ")");
+                } else if (retries > 0) {
 //                    System.err.println("Request failed. Retrying in "+retries*retryTime/1000+" seconds");
                 }
-                Thread.sleep((long) retries *retryTime);
+                Thread.sleep((long) retries * retryTime);
                 con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("POST");
                 con.addRequestProperty("Content-Type", "application/" + "POST");
@@ -151,7 +179,7 @@ public class Piston {
                 String requestBody = new Gson().toJson(request);
                 con.setRequestProperty("Content-Length", Integer.toString(requestBody.length()));
                 con.getOutputStream().write(requestBody.getBytes(StandardCharsets.UTF_8));
-            } while (con.getResponseCode()==429);
+            } while (con.getResponseCode() == 429);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return new ExecutionResult();
@@ -167,14 +195,14 @@ public class Piston {
             String result = stringBuilder.toString();
             ExecutionResult executionResult = new Gson().fromJson(result, ExecutionResult.class);
             return executionResult;
-        }catch (IOException e){
-            InputStream errorStream=con.getErrorStream();
-            if(errorStream!=null){
-                String error=Util.readStream(errorStream);
-                JsonObject object=new Gson().fromJson(error,JsonObject.class);
-                String message=error;
-                if(object.has("message"))
-                    message=object.get("message").getAsString();
+        } catch (IOException e) {
+            InputStream errorStream = con.getErrorStream();
+            if (errorStream != null) {
+                String error = Util.readStream(errorStream);
+                JsonObject object = new Gson().fromJson(error, JsonObject.class);
+                String message = error;
+                if (object.has("message"))
+                    message = object.get("message").getAsString();
                 throw new PistonException(message);
             }
             throw new PistonException(e.getMessage());

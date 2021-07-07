@@ -5,27 +5,23 @@ import java.util.Arrays;
 public class Runtime {
     private String language;
     private String version;
-    private String[]aliases;
+    private String[] aliases;
     private Piston piston;
 
     /**
      * @param alias the alias
      * @return whether alias is a valid alias of this runtime
      */
-    public boolean hasAlias(String alias){
-        return language.equalsIgnoreCase(alias)|| Arrays.stream(aliases).anyMatch(alias::equalsIgnoreCase);
-    }
-
-    protected void setPiston(Piston piston) {
-        this.piston = piston;
+    public boolean hasAlias(String alias) {
+        return language.equalsIgnoreCase(alias) || Arrays.stream(aliases).anyMatch(alias::equalsIgnoreCase);
     }
 
     /**
      * @param files the files used. Must be at least one
      * @return the result
      */
-    public ExecutionResult execute(File... files){
-        ExecutionRequest request=new ExecutionRequest(language,version,files);
+    public ExecutionResult execute(File... files) {
+        ExecutionRequest request = new ExecutionRequest(language, version, files);
         return piston.execute(request);
     }
 
@@ -52,5 +48,9 @@ public class Runtime {
 
     public Piston getPiston() {
         return piston;
+    }
+
+    protected void setPiston(Piston piston) {
+        this.piston = piston;
     }
 }

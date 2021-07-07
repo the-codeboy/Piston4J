@@ -1,21 +1,21 @@
 package com.github.codeboy.piston4j.api;
 
 public class ExecutionRequest {
-    private String language,version;
-    private File[]files;
-    private String stdin="";
-    private String[]args={};
-    private int compile_timeout=10000,
-            run_timeout=3000,
-            compile_memory_limit=-1,
-            run_memory_limit=-1;
+    private String language, version;
+    private File[] files;
+    private String stdin = "";
+    private String[] args = {};
+    private int compile_timeout = 10000,
+            run_timeout = 3000,
+            compile_memory_limit = -1,
+            run_memory_limit = -1;
 
     /**
      * @param language the language of the request
-     * @param version the version of the programming language
-     * @param files Files used. Must be at least one if this request should be executed by {@link Piston#execute(ExecutionRequest)}
+     * @param version  the version of the programming language
+     * @param files    Files used. Must be at least one if this request should be executed by {@link Piston#execute(ExecutionRequest)}
      */
-    public ExecutionRequest(String language, String version, File...files) {
+    public ExecutionRequest(String language, String version, File... files) {
         this.language = language;
         this.version = version;
         this.files = files;
@@ -168,8 +168,8 @@ public class ExecutionRequest {
     /**
      * @return if this request can be sent
      */
-    public boolean isValid(){
-        return files.length>0;
+    public boolean isValid() {
+        return files.length > 0;
     }
 
 }
