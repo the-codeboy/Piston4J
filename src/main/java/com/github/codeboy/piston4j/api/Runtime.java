@@ -6,7 +6,7 @@ public class Runtime {
     private String language;
     private String version;
     private String[] aliases;
-    private Piston piston;
+    private transient Piston piston;
 
     /**
      * @param alias the alias
