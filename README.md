@@ -38,6 +38,10 @@ repositories {
 
 ## Examples
 
+> Running code in one line. It is not recommended to use the api like this
+```java
+System.out.println(Piston.getDefaultApi().execute("python","print(\"Hello, World!\")").getOutput().getStdout());```
+
 > A simple Hello World using javascript
 
 ```java
