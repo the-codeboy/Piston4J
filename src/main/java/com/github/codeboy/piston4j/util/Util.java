@@ -1,5 +1,7 @@
 package com.github.codeboy.piston4j.util;
 
+import com.github.codeboy.piston4j.exceptions.PistonException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +36,7 @@ public class Util {
 
             return stringBuilder.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new PistonException(e);
         }
-        return "";
     }
 }

@@ -23,15 +23,15 @@ import java.util.Optional;
 
 public class Piston {
     private final static HashMap<String, Piston> instances = new HashMap<>();
-    private static final Piston piston = new Piston("https://emkc.org/api/v2/piston");
+    private static Piston piston;
 
     private final String url;
+    private final int retryLimit = 10;
+    private final int retryTime = 500;
     private List<Runtime> runtimes = new ArrayList<>();
     private boolean initialised = false;
     private Thread initialisationThread;
-    private final int retryLimit = 10;
-    private final int retryTime = 500;
-    private String apiKey=null;
+    private String apiKey = null;
 
     /**
      * private to prevent creation of multiple instances for the same api
@@ -66,7 +66,7 @@ public class Piston {
      * @return the default instance {@link Piston}
      */
     public static Piston getDefaultApi() {
-        return piston;
+        return piston == null ? piston = new Piston("https://emkc.org/api/v2/piston") : piston;
     }
 
     /**
@@ -95,7 +95,7 @@ public class Piston {
             } catch (MalformedURLException e) {
                 throw new IllegalArgumentException("\"" + url + "\" is not a valid url");
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new PistonException(e);
             }
         });
         initialisationThread.start();
@@ -140,7 +140,7 @@ public class Piston {
             try {
                 initialisationThread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new PistonException(e);
             }
         }
         return runtimes;
@@ -162,7 +162,7 @@ public class Piston {
      * @return the result
      */
     public ExecutionResult execute(String language, String code) {
-        return execute(language,new CodeFile(code));
+        return execute(language, new CodeFile(code));
     }
 
     /**
@@ -208,24 +208,23 @@ public class Piston {
                 retries++;
                 if (retries >= retryLimit) {
                     throw new PistonException("Reached retry limit (" + retryLimit + ")");
-                } else if (retries > 0) {
-//                    System.err.println("Request failed. Retrying in "+ (retries*retryTime)+" milliseconds");
                 }
+
                 Thread.sleep((long) retries * retryTime);
                 con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("POST");
-                if(apiKey!=null)
-                    con.addRequestProperty("Authorization",apiKey);
+                if (apiKey != null)
+                    con.addRequestProperty("Authorization", apiKey);
                 con.addRequestProperty("Content-Type", "application/" + "POST");
                 con.setDoOutput(true);
+                con.setRequestProperty("User-Agent", "Piston4J");
 
                 String requestBody = new Gson().toJson(request);
                 con.setRequestProperty("Content-Length", Integer.toString(requestBody.length()));
                 con.getOutputStream().write(requestBody.getBytes(StandardCharsets.UTF_8));
             } while (con.getResponseCode() == 429);
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return new ExecutionResult();
+            throw new PistonException(e);
         }
 
 
@@ -236,8 +235,7 @@ public class Piston {
                 stringBuilder.append(inputLine);
             }
             String result = stringBuilder.toString();
-            ExecutionResult executionResult = new Gson().fromJson(result, ExecutionResult.class);
-            return executionResult;
+            return new Gson().fromJson(result, ExecutionResult.class);
         } catch (IOException e) {
             InputStream errorStream = con.getErrorStream();
             if (errorStream != null) {

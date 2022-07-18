@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 public class CodeFile {
     private String name;
-    private String content;
+    private final String content;
 
     /**
      * creates a file without a name
@@ -42,7 +42,7 @@ public class CodeFile {
      * creates a {@link CodeFile} from a real file
      */
     public CodeFile fromFile(Path path) throws IOException {
-        return fromFile(path,Charset.defaultCharset());
+        return fromFile(path, Charset.defaultCharset());
     }
 
     /**
@@ -50,8 +50,8 @@ public class CodeFile {
      */
     public CodeFile fromFile(Path path, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(path);
-        String content=new String(encoded, encoding);
-        CodeFile codeFile=new CodeFile(path.getFileName().toString(),content);
+        String content = new String(encoded, encoding);
+        CodeFile codeFile = new CodeFile(path.getFileName().toString(), content);
         return codeFile;
     }
 

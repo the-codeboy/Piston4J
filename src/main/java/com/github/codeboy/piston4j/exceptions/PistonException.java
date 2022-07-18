@@ -9,4 +9,8 @@ public class PistonException extends RuntimeException {
     public PistonException() {
         super();
     }
+
+    public PistonException(Throwable cause) {
+        super(cause);
+    }
 }
