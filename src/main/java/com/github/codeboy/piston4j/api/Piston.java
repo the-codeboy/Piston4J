@@ -42,6 +42,27 @@ public class Piston {
     }
 
     /**
+     * it is not recommended to use this method
+     * @param language the language the code is in
+     * @param code the code
+     * @return the result of the program or the compile output if the result is empty
+     */
+    public static String run(String language, String code) {
+        ExecutionResult result = getDefaultApi().execute(language, code);
+        ExecutionOutput out = result.getOutput();
+        String output = out.getOutput();
+        if (output != null && output.length() > 0) {
+            return output;
+        }
+        ExecutionOutput compileOutput = result.getCompileOutput();
+        if (compileOutput != null && (output = compileOutput.getOutput()) != null
+                && output.length() > 0) {
+            return output;
+        }
+        return "";
+    }
+
+    /**
      * @return the default instance {@link Piston}
      */
     public static Piston getDefaultApi() {
