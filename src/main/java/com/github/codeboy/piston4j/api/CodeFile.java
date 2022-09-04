@@ -55,4 +55,17 @@ public class CodeFile {
         return codeFile;
     }
 
+    /**
+     * @return the name of the file - might be null
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return the content of the file
+     */
+    public String getContent() {
+        return content;
+    }
 }
