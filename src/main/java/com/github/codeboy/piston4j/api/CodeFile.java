@@ -34,21 +34,21 @@ public class CodeFile {
     /**
      * creates a {@link CodeFile} from a real file
      */
-    public CodeFile fromFile(File file) throws IOException {
+    public static CodeFile fromFile(File file) throws IOException {
         return fromFile(Paths.get(file.getPath()));
     }
 
     /**
      * creates a {@link CodeFile} from a real file
      */
-    public CodeFile fromFile(Path path) throws IOException {
+    public static CodeFile fromFile(Path path) throws IOException {
         return fromFile(path, Charset.defaultCharset());
     }
 
     /**
      * creates a {@link CodeFile} from a real file
      */
-    public CodeFile fromFile(Path path, Charset encoding) throws IOException {
+    public static CodeFile fromFile(Path path, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(path);
         String content = new String(encoded, encoding);
         CodeFile codeFile = new CodeFile(path.getFileName().toString(), content);
