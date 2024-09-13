@@ -215,7 +215,7 @@ public class Piston {
                 con.setRequestMethod("POST");
                 if (apiKey != null)
                     con.addRequestProperty("Authorization", apiKey);
-                con.addRequestProperty("Content-Type", "application/" + "POST");
+                con.addRequestProperty("Content-Type", "application/" + "json");
                 con.setDoOutput(true);
                 con.setRequestProperty("User-Agent", "Piston4J");
 
